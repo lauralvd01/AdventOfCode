@@ -1,14 +1,18 @@
-# Day 5, part 1 of Advent of Code 2023
+# Day 5, part 2 of Advent of Code 2023
 
 #data_file = open('../Data/day05_test1.txt', 'r')
-
 data_file = open('../Data/day05.txt', 'r')
 
 data_lines = [line for line in data_file]
 data_file.close()
 
 
-seeds = [int(num) for num in data_lines[0][7:-1].split(' ')]
+seed_ranges = [int(num) for num in data_lines[0][7:-1].split(' ')]
+seeds = []
+for i in range(0,len(seed_ranges),2) :
+    for j in range(seed_ranges[i],seed_ranges[i]+seed_ranges[i+1]) :
+        seeds.append(j)
+print(len(seeds))
 
 l = 3
 data_sets = []
