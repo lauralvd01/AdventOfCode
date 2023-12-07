@@ -102,4 +102,4 @@ for hand in ranked.keys() :
     rank += 1
 
 print('Result = ',result)
-# Answer is not 248256639
+# Answer is 248256639
