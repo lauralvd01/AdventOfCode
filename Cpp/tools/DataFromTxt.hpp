@@ -14,8 +14,7 @@ public:
     DataFromTxt(std::string path);
     ~DataFromTxt();
 
-    std::string getPath() const;
-    std::vector<std::string> readLines(bool print=false);
+    std::vector<std::string> dataToVector(bool print=false);
 };
 
 #endif // DATA_FROM_TXT_HPP

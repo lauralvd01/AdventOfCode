@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <iterator>
+#include <fstream>
 
 #include "../../tools/DataFromTxt.hpp"
 
@@ -13,14 +16,63 @@ int main()
     string path = "D:/.Documents/AdventOfCode/Data/day01_test2.txt";
     //string path = "D:/.Documents/AdventOfCode/Data/day01.txt";
     DataFromTxt data(path);
-    vector<string> lines = data.readLines(true);
+    vector<string> lines = data.dataToVector(true);
 
     string cifers[10] = {"zero","one","two","tree","four","five","six","seven","eight","nine"};
-    string num("1234567890");
+    string num("0123456789");
 
     int sum = 0;
     for (string line : lines)
     {
+        string first;
+        size_t first_it = string::npos;
+        int i(0);
+        while (first_it == string::npos && i<10)
+        {
+            size_t it = line.find(cifers[i]);
+            if(it != string::npos && it < first_it)
+            {
+                first_it = it;
+                break;
+            }
+            ++i;
+        }
+        size_t it = line.find_first_of(num);
+        if( first_it < it)
+        {
+            first = to_string(i);
+        }
+        else
+        {
+            first = line[it];
+        }
+
+        string last;
+        size_t last_it = string::npos;
+        i = 0;
+        while (last_it == string::npos && i<10)
+        {
+            size_t it = line.rfind(cifers[i]);
+            if(last_it > it)
+            {
+                last_it = it;
+                break;
+            }
+            ++i;
+        }
+        it = line.find_last_of(num);
+        if(last_it > it)
+        {
+            last = to_string(i);
+        }
+        else
+        {
+            last = line[it];
+        }
+        
+        cout << first << " " << last << endl;
+
+    /*
         size_t first_num = line.find_first_of(num);
         size_t first_cif(line.size()+1);
         string first_number;
@@ -55,7 +107,8 @@ int main()
             last_number = line[last_num];
         }
         cout << first_number << last_number << endl;
-        sum += stoi(first_number+last_number);
+    */
+        sum += stoi(first+last);
     }
 
     cout << "Result : " << sum << endl;

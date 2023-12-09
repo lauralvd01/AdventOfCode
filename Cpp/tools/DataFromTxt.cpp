@@ -1,6 +1,9 @@
 #include "DataFromTxt.hpp"
 
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <iterator>
 #include <fstream>
 
 using namespace std;
@@ -8,6 +11,13 @@ using namespace std;
 // Constructeur
 DataFromTxt::DataFromTxt(string path) : m_path(path), m_data(vector<string>())
 {
+    ifstream fichier(m_path);
+    
+    istream_iterator<string> it(fichier);
+    istream_iterator<string> fin;
+    back_insert_iterator<vector<string> > it2(m_data);
+    
+    copy(it, fin, it2);
 };
 
 DataFromTxt::~DataFromTxt()
@@ -15,37 +25,11 @@ DataFromTxt::~DataFromTxt()
 };
 
 // Méthodes
-string DataFromTxt::getPath() const
+vector<string> DataFromTxt::dataToVector(bool print)
 {
-    return m_path;
-};
-
-vector<string> DataFromTxt::readLines(bool print)
-{
-    if(m_data.size() > 0)
+    if(print)
     {
-        return m_data;
+        copy(m_data.begin(), m_data.end(), ostream_iterator<string>(cout, "\n"));
     }
-    else
-    {
-        ifstream data(m_path);
-        if(data)
-        {
-            string line;
-            while(getline(data, line))
-            {
-                m_data.push_back(line);
-                if(print)
-                {
-                    cout << line << endl;
-                }
-            }
-        }
-        else
-        {
-            cerr << "ERROR: Can't open file." << endl;
-        }
-
-        return m_data;
-    };
+    return m_data;
 };

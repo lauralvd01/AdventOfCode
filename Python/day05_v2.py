@@ -44,4 +44,5 @@ while a == 0 :
     location += 1
     
 print('Result = ', location-1)
-# Answer is 
+# Answer is 6082852
+# Too long
