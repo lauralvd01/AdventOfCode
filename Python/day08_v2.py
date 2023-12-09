@@ -1,4 +1,4 @@
-# Day 8, part 1 of Advent of Code 2023
+# Day 8, part 2 of Advent of Code 2023
 
 #data_file = open('./Data/day08_test3.txt', 'r')
 
