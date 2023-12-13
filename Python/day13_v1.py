@@ -30,6 +30,10 @@ def get_reflections(pattern):
             length += 1
         reflections_rows[r] = length
     #print('Rows',reflections_rows)
+    real_ref_rows = {}
+    for r in reflections_rows :
+        if r+reflections_rows[r] == len(pattern) or r-reflections_rows[r] == 0 :
+            real_ref_rows[r] = reflections_rows[r] 
     
     reflections_columns = {}
     j = 0
@@ -44,7 +48,12 @@ def get_reflections(pattern):
         reflections_columns[r] = length
     #print("Columns",reflections_columns)
     
-    return reflections_rows, reflections_columns
+    real_ref_columns = {}
+    for r in reflections_columns :
+        if r+reflections_columns[r] == len(pattern) or r-reflections_columns[r] == 0 :
+            real_ref_columns[r] = reflections_columns[r] 
+    
+    return real_ref_rows, real_ref_columns
 
 
 
@@ -71,4 +80,4 @@ for pattern in patterns :
         result += (reflection + 1) * m_rows
  
 print('Result = ',result)
-# Answer is not 30645
+# Answer is not 2442
