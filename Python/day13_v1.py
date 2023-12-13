@@ -29,11 +29,12 @@ def get_reflections(pattern):
         while r-length >= 0 and r+length+1 < len(pattern) and pattern[r-length][:] == pattern[r+length+1][:] :
             length += 1
         reflections_rows[r] = length
-    #print('Rows',reflections_rows)
+        
     real_ref_rows = {}
     for r in reflections_rows :
-        if r+reflections_rows[r] == len(pattern) or r-reflections_rows[r] == 0 :
+        if r+reflections_rows[r] == len(pattern)-1 or r-reflections_rows[r]+1 == 0 :
             real_ref_rows[r] = reflections_rows[r] 
+    #print('Rows',real_ref_rows)
     
     reflections_columns = {}
     j = 0
@@ -46,12 +47,12 @@ def get_reflections(pattern):
         while r-length >= 0 and r+length+1 < len(pattern[0]) and ''.join([pattern[i][r-length] for i in range(len(pattern))]) == ''.join([pattern[i][r+length+1] for i in range(len(pattern))]) :
             length += 1
         reflections_columns[r] = length
-    #print("Columns",reflections_columns)
     
     real_ref_columns = {}
     for r in reflections_columns :
-        if r+reflections_columns[r] == len(pattern) or r-reflections_columns[r] == 0 :
+        if r+reflections_columns[r] == len(pattern[0])-1 or r-reflections_columns[r]+1 == 0 :
             real_ref_columns[r] = reflections_columns[r] 
+    #print("Columns",real_ref_columns)
     
     return real_ref_rows, real_ref_columns
 
@@ -73,7 +74,6 @@ for pattern in patterns :
             max_r = reflections_columns[r]
             reflection = r
             column = True
-    #print('Pattern',p,'Reflection',reflection,'Column',column)
     if column :
         result += reflection + 1
     else :
