@@ -80,4 +80,4 @@ for pattern in patterns :
         result += (reflection + 1) * m_rows
  
 print('Result = ',result)
-# Answer is not 2442
+# Answer is 27300
