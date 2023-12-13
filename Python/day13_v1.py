@@ -1,8 +1,8 @@
 # Day 13, part 1 of Advent of Code 2023
 
-data_file = open('./Data/day13_test1.txt', 'r')
+#data_file = open('./Data/day13_test1.txt', 'r')
 
-#data_file = open('./Data/day13.txt', 'r')
+data_file = open('./Data/day13.txt', 'r')
 
 data_lines = [line.strip() for line in data_file]
 data_file.close()
@@ -10,7 +10,7 @@ data_file.close()
 patterns = []
 i = 0
 while i < len(data_lines):
-    pattern = []
+    pattern = [] 
     while i < len(data_lines) and data_lines[i] != '':
         pattern.append(data_lines[i])
         i += 1
@@ -28,9 +28,22 @@ def get_reflections(pattern):
         length = 1
         while r-length >= 0 and r+length+1 < len(pattern) and pattern[r-length][:] == pattern[r+length+1][:] :
             length += 1
-    print('Rows',reflections_rows)
+        reflections_rows[r] = length
+    #print('Rows',reflections_rows)
     
     reflections_columns = {}
+    j = 0
+    while j < len(pattern[0]) -1 :
+        if ''.join([pattern[i][j] for i in range(len(pattern))]) == ''.join([pattern[i][j+1] for i in range(len(pattern))]) :
+            reflections_columns[j] = 1
+        j += 1
+    for r in reflections_columns :
+        length = 1
+        while r-length >= 0 and r+length+1 < len(pattern[0]) and ''.join([pattern[i][r-length] for i in range(len(pattern))]) == ''.join([pattern[i][r+length+1] for i in range(len(pattern))]) :
+            length += 1
+        reflections_columns[r] = length
+    #print("Columns",reflections_columns)
+    
     return reflections_rows, reflections_columns
 
 
@@ -58,4 +71,4 @@ for pattern in patterns :
         result += (reflection + 1) * m_rows
  
 print('Result = ',result)
-# Answer is 7286
+# Answer is not 30645
