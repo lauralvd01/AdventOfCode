@@ -49,7 +49,6 @@ class Map :
                     self.rocks[index] = (rock_i,j)
     
     
-    
     def cycle(self) :
         self.tilt_north()
         self.tilt_west()
