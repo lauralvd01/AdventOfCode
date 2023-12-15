@@ -1,4 +1,4 @@
-# Day 14, part 1 of Advent of Code 2023
+# Day 14, part 2 of Advent of Code 2023
 
 #data_file = open('./Data/day14_test1.txt', 'r')
 
