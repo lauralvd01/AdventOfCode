@@ -28,16 +28,24 @@ def get_neighbors(current) :
     ####   [ down-left   down  down-right ]]
     return n
 
+visited = []
+
 def get_min_path(current,count=0,direction=None) :
+    #print(current,count,direction)
+    
     if current == end :
         return map[current[0]][current[1]][0]
     
     if not map[current[0]][current[1]][1] :
-        map[current[0]][current[1]][1] = True
+        if (current,count,direction) in visited :
+            map[current[0]][current[1]][1] = True
+        else :
+            visited.append((current,count,direction))
         
     neighbors = get_neighbors(current)
     heat_losses = []
     
+    #sorted_neighbors = sort(neighbors)
     down = neighbors[2][1]
     if down is not None and not map[down[0]][down[1]][1] and (direction != 'down' or count < max_in_line) :
         result_down = get_min_path(down,count+1 if direction == 'down' else 1,'down')
