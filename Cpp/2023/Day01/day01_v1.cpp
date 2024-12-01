@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "../../tools/DataFromTxt.hpp"
+#include "../../../../tools/DataFromTxt.hpp"
 
 using namespace std;
 
@@ -10,8 +10,8 @@ using namespace std;
 
 int main()
 {
-    //string path = "D:/.Documents/AdventOfCode/Data/day01_test1.txt";
-    string path = "D:/.Documents/AdventOfCode/Data/day01.txt";
+    //string path = "D:/.Documents/AdventOfCode/Data/2023/day01_test1.txt";
+    string path = "D:/.Documents/AdventOfCode/Data/2023/day01.txt";
     DataFromTxt data(path);
     vector<string> lines = data.readLines();
 
