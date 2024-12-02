@@ -1,7 +1,7 @@
 # Day 1, Advent of Code 2024
 
-#data_file = open('../../Data/2024/day01_test.txt', 'r')
-data_file = open('../../Data/2024/day01.txt', 'r')
+#data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day01_test.txt", 'r')
+data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day01.txt", 'r')
 
 part = 2
 
