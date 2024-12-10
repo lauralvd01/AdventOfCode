@@ -1,6 +1,5 @@
 # Day 8, Advent of Code 2024
 
-import re
 import itertools
 
 #data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day08_test.txt", 'r')
