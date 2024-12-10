@@ -1,4 +1,3 @@
-
 # Day 6, Advent Of Code 2024
 
 #data_file = open("day06_test.txt","r")
