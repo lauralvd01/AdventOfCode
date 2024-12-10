@@ -1,7 +1,5 @@
 # Day 4, Advent of Code 2024
 
-import re
-
 #data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day04_test.txt", 'r')
 data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day04.txt", 'r')
 
