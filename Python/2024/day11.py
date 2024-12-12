@@ -70,7 +70,7 @@ def solve(part):
             stones = new_stones
 
         total = sum(stones.values())
-        return total  # Answer is 
+        return total  # Answer is 257335372288947
 
     else:
         data_file.close()
