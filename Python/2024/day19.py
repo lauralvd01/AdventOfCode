@@ -23,32 +23,21 @@ def is_possible(design, towels_by_lenght) :
     return start_slice_is_possible[-1]
 
 def is_possible2(design, towels_by_lenght) :
-    start_slice_is_possible = [[False,[]] for i in range(len(design)+1)]
-    start_slice_is_possible[0] = [True,[0]] # design[:0] = '' => always possible (no towel)
+    start_slice_is_possible = [0 for i in range(len(design)+1)]
+    start_slice_is_possible[0] = 1 # design[:0] = '' => always possible (no towel = one way)
     
     for i in range(1, len(design)+1) :
         # Test if design[:i] is possible
         for j in [lenght for lenght in towels_by_lenght if lenght <= i] :
             # Check if making design[:i-j] is possible and if design[i-j:i] is a towel
-            if start_slice_is_possible[i-j][0] :
+            if start_slice_is_possible[i-j] > 0 :
                 for towel in towels_by_lenght[j] :
                     if design[i-j:i] == towel :
-                        # Then makng design[:i] is possible
-                        start_slice_is_possible[i][0] = True
-                        start_slice_is_possible[i][1].append(j)
-    return start_slice_is_possible
-
-def get_number_of_possibilities(current_index, start_slice_is_possible) :
-    if not start_slice_is_possible[current_index][0] :
-        return 0
-    if current_index == 0 :
-        return 1
-    
-    count = 0
-    for lenght in start_slice_is_possible[current_index][1] :
-        result = get_number_of_possibilities(current_index-lenght, start_slice_is_possible)
-        count += result
-    return count
+                        # Then making design[:i] is possible with this towel
+                        # There are start_slice_is_possible[i-j] ways to make design[:i-j]
+                        # So there are start_slice_is_possible[i-j] ways to make design[:i] with this towel
+                        start_slice_is_possible[i] += start_slice_is_possible[i-j]
+    return start_slice_is_possible[-1]
 
 def solve(part):
     
@@ -89,17 +78,10 @@ def solve(part):
                 
         designs = data[1].split('\n')
         
-        possibilities = []
-        for design in designs :
-            start_slice_is_possible = is_possible2(design, towels_by_lenght)
-            if start_slice_is_possible[-1][0] :
-                possibilities.append(start_slice_is_possible)
-          
         total = 0
-        for possibility in possibilities :
-            print(possibility)
-            total += get_number_of_possibilities(len(possibility)-1, possibility)
-        return total  # Answer is 
+        for design in designs :
+            total += is_possible2(design, towels_by_lenght)
+        return total  # Answer is 639963796864990
     
     else:
         data_file.close()
