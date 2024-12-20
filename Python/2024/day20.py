@@ -4,26 +4,7 @@
 data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day20.txt", 'r')
 
 
-part = 1
-
-def get_path_recursion(current, map) :
-    print()
-    print('\n'.join([''.join(row) for row in map]))
-    i,j = current
-    
-    if map[i][j] == 'E' :
-        map[i][j] = 'O'
-        return [current]
-    
-    for di, dj in [(-1,0), (0,1), (1,0), (0,-1)] :
-        if 1 <= i+di < len(map)-1 and 1 <= j+dj < len(map[0])-1 and map[i+di][j+dj] != '#' and map[i+di][j+dj] != 'X' :
-            map[i][j] = 'X'
-            next = get_path_recursion((i+di,j+dj), map)
-            if next is not None :
-                map[i][j] = 'O'
-                return [current] + next
-    map[i][j] = 'X'
-    return None
+part = 2
 
 def get_path(start, end, map) :
     i,j = start
@@ -37,6 +18,48 @@ def get_path(start, end, map) :
                 map[i][j] = 'O'
                 break
     return path
+
+def get_cheatings_from(start,map) :
+    new_map = [[cell for cell in row] for row in map] # Copy of the map to avoid modifying the original map
+    i,j = start
+    new_map[i][j] = 'S' # Start position of the cheat path
+    
+    cheat_ends_by_lenght = {} # {n : (i,j) list} End positions of correct cheat paths of lenght n, starting from start, passing at least one wall and returning on the original path
+    end_positions = [] # List of just the end positions of the cheat paths
+    
+    # First next steps : pass through a wall
+    next = []
+    for di, dj in [(-1,0),(0,1),(1,0),(0,-1)] :
+        if 1 <= i+di < len(new_map)-1 and 1 <= j+dj < len(new_map[0])-1 and map[i+di][j+dj] == '#' :
+            new_map[i+di][j+dj] = '1'
+            next.append((i+di,j+dj))
+    
+    # Next steps : continue cheating (through a wall or not) until the end of the maximum cheating time (20 picoseconds)
+    for n in range(2,21) :
+        next_next = []
+        while len(next) > 0 :
+            current_i, current_j = next.pop(0)
+            for di, dj in [(-1,0),(0,1),(1,0),(0,-1)] :
+                if 1 <= current_i+di < len(new_map)-1 and 1 <= current_j+dj < len(new_map[0])-1 :
+                    next_i, next_j = current_i+di, current_j+dj
+                    
+                    # Continuing with this next position if it is not a wall or a position already visited
+                    if new_map[next_i][next_j] == '#' or new_map[next_i][next_j] == 'O' :
+                        new_map[next_i][next_j] = f"{n}" # Mark the position as visited
+                        next_next.append((next_i,next_j))
+                        
+                        # If we return on the original path, we have a correct cheat path
+                        if map[next_i][next_j] == 'O' :
+                            # 2 cheat paths that start from the same position and end at the same position are considered the same
+                            if (next_i,next_j) not in end_positions :
+                                end_positions.append((next_i,next_j))
+                                # We sort the cheat paths by the number of picoseconds used to cheat (between 2 and 20)
+                                if n not in cheat_ends_by_lenght.keys() :
+                                    cheat_ends_by_lenght[n] = [(next_i,next_j)]
+                                else :
+                                    cheat_ends_by_lenght[n].append((next_i,next_j))
+        next = next_next
+    return cheat_ends_by_lenght
 
 def solve(part) :
     if part == 1 :
@@ -58,47 +81,86 @@ def solve(part) :
                 j += 1 
             map.append(row)
             i += 1 
-        print('\n'.join([''.join(row) for row in map]))
-        print(start)
-        print(end)
-        print(len(map),len(map[0]))
         
         map[start[0]][start[1]] = 'O'
         path = get_path(start, end, map)
-        print(len(path))
-        print('\n'.join([''.join(row) for row in map]))
-        print()
         
         cheats = {}
         without_cheat = len(path)
-        index1 = 0
+        index_1 = 0
         for step in path :
             i,j = step
             for di, dj in [(-1,0), (0,1), (1,0), (0,-1)] :
                 if 1 <= i+di < len(map)-1 and 1 <= j+dj < len(map[0])-1 and map[i+di][j+dj] == '#' :
                     try :
                         index2 = path.index((i+2*di,j+2*dj))
-                    
-                        #map[i+di][j+dj] = '1'
-                        #map[i+2*di][j+2*dj] = '2'
-                        #print('\n'.join([''.join(row) for row in map]))
-                        #map[i+di][j+dj] = 'O'
-                        #map[i+2*di][j+2*dj] = 'O'
-                        
-                        picoseconds_saved = without_cheat - (len(path[:index1]) + len(path[index2:])) -2
+                        picoseconds_saved = without_cheat - (len(path[:index_1]) + len(path[index2:])) -2
                         if picoseconds_saved in cheats.keys() :
                             cheats[picoseconds_saved] += 1 
                         elif picoseconds_saved > 0 :
                             cheats[picoseconds_saved] = 1
                     except Exception :
                         pass
-            index1 += 1
+            index_1 += 1
         
         total = 0
         for cheat in cheats.keys() :
             if cheat >= 100 :
                 total += cheats[cheat]
-        print(cheats)
+        return total # Answer is 1311
+    
+    elif part == 2 :
+        # Part 2
+        
+        map = []
+        start = None
+        end = None
+        i = 0
+        for line in data_file :
+            row = []
+            j = 0
+            for cell in line.strip() :
+                row.append(cell)
+                if cell == 'S' :
+                    start = (i,j)
+                if cell == 'E' :
+                    end = (i,j)
+                j += 1 
+            map.append(row)
+            i += 1 
+        
+        map[start[0]][start[1]] = 'O'
+        path = get_path(start, end, map)
+        
+        cheats = {} # {n : number_of_different_cheat_paths_that_save_n_picoseconds}
+        index1 = 0  # Start position of the cheat paths
+        for step in path :
+            # End positions of correct cheat paths starting from step, passing at least one wall and returning on the original path
+            cheat_ends = get_cheatings_from(step,map) # {n : (i,j) list} with n the number of picoseconds used to cheat to reach (i,j)
+            for lenght in cheat_ends.keys() :
+                for cheat_end in cheat_ends[lenght] :
+                    try :
+                        index_n = path.index(cheat_end)
+                        if index_n > index1 :
+                            picoseconds_saved = index_n-index1 - lenght
+                            if picoseconds_saved in cheats.keys() :
+                                cheats[picoseconds_saved] += 1
+                            elif picoseconds_saved > 0 :
+                                print(f"New cheat path of {picoseconds_saved} picoseconds saved")
+                                cheats[picoseconds_saved] = 1
+                                    
+                    except Exception :
+                        pass
+            index1 += 1
+            
+        total = 0
+        for cheat in cheats.keys() :
+            if cheat >= 100 :
+                total += cheats[cheat]
         return total
+    
+    else:
+        data_file.close()
+        return 'Invalid part'
 
 print(solve(part))
