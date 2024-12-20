@@ -157,7 +157,7 @@ def solve(part) :
         for cheat in cheats.keys() :
             if cheat >= 100 :
                 total += cheats[cheat]
-        return total
+        return total # Answer is not 935834 but more ...
     
     else:
         data_file.close()
