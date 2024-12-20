@@ -1,11 +1,16 @@
 # Day 20 - Advent Of Code 2024
 
-data_file = open("day20.txt","r")
+# data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day20_test.txt", 'r')
+data_file = open("C:\\Users\\LauraLvd\\Documents\\PRO\\AdventOfCode\\Data\\2024\\day20.txt", 'r')
+
 
 part = 1
 
-def get_path(current, map) :
+def get_path_recursion(current, map) :
+    print()
+    print('\n'.join([''.join(row) for row in map]))
     i,j = current
+    
     if map[i][j] == 'E' :
         map[i][j] = 'O'
         return [current]
@@ -13,12 +18,25 @@ def get_path(current, map) :
     for di, dj in [(-1,0), (0,1), (1,0), (0,-1)] :
         if 1 <= i+di < len(map)-1 and 1 <= j+dj < len(map[0])-1 and map[i+di][j+dj] != '#' and map[i+di][j+dj] != 'X' :
             map[i][j] = 'X'
-            next = get_path((i+di,j+dj), map)
+            next = get_path_recursion((i+di,j+dj), map)
             if next is not None :
                 map[i][j] = 'O'
                 return [current] + next
     map[i][j] = 'X'
     return None
+
+def get_path(start, end, map) :
+    i,j = start
+    path = [start]
+    while (i,j) != end :
+        for di, dj in [(-1,0), (0,1), (1,0), (0,-1)] :
+            if 1 <= i+di < len(map)-1 and 1 <= j+dj < len(map[0])-1 and map[i+di][j+dj] != '#' and map[i+di][j+dj] != 'O' :
+                i += di
+                j += dj
+                path.append((i,j))
+                map[i][j] = 'O'
+                break
+    return path
 
 def solve(part) :
     if part == 1 :
@@ -40,11 +58,13 @@ def solve(part) :
                 j += 1 
             map.append(row)
             i += 1 
-        #print('\n'.join([''.join(row) for row in map]))
+        print('\n'.join([''.join(row) for row in map]))
         print(start)
         print(end)
+        print(len(map),len(map[0]))
         
-        path = get_path(start, map)
+        map[start[0]][start[1]] = 'O'
+        path = get_path(start, end, map)
         print(len(path))
         print('\n'.join([''.join(row) for row in map]))
         print()
@@ -68,7 +88,7 @@ def solve(part) :
                         picoseconds_saved = without_cheat - (len(path[:index1]) + len(path[index2:])) -2
                         if picoseconds_saved in cheats.keys() :
                             cheats[picoseconds_saved] += 1 
-                        else :
+                        elif picoseconds_saved > 0 :
                             cheats[picoseconds_saved] = 1
                     except Exception :
                         pass
@@ -78,6 +98,7 @@ def solve(part) :
         for cheat in cheats.keys() :
             if cheat >= 100 :
                 total += cheats[cheat]
+        print(cheats)
         return total
 
 print(solve(part))
